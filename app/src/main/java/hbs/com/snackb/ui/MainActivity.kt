@@ -4,24 +4,24 @@ import android.os.Bundle
 import android.view.TextureView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
-import hbs.com.snackb.R
-import hbs.com.snackb.utils.CameraManagerImpl
-import hbs.com.snackb.utils.PermissionManager
+import hbs.com.snackb.utils.*
 import hbs.com.snackb.utils.PermissionManager.Companion.REQUEST_CODE_PERMISSIONS
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
-    private val cameraManager  = CameraManagerImpl()
+    private val cameraManager : CameraManager = CameraManagerImpl()
     private val permissionManager = PermissionManager()
+    private val arCoreManager : ARCoreManager = ARCoreManagerImpl(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(hbs.com.snackb.R.layout.activity_main)
 
         checkPermission(true)
         // Every time the provided texture view changes, recompute layout
         addLayoutChangeListener(view_finder)
+        checkInstallARCore()
     }
 
     override fun onRequestPermissionsResult(
@@ -53,4 +53,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         }
     }
 
+    private fun checkInstallARCore(){
+        // Make sure ARCore is installed and up to date.
+        arCoreManager.initSession().run {}
+    }
 }
