@@ -14,6 +14,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import hbs.com.snackb.R
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
@@ -26,16 +27,14 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         arFragment = supportFragmentManager.findFragmentById(R.id.fragment_scene) as ArFragment
-        addObject(Uri.parse("model.sfb"))
-
-
+        btn_make_ar.setOnClickListener { addObject(Uri.parse("model.sfb")) }
     }
 
     private fun addObject(parse: Uri) {
         val frame = arFragment.arSceneView.arFrame
         val point = getScreenCenter()
         if (frame != null) {
-            val hits = frame.hitTest(point.x as Float, point.y as Float)
+            val hits = frame.hitTest(point.x.toFloat(), point.y.toFloat())
 
             for (i in hits.indices) {
                 val trackable = hits[i].trackable
