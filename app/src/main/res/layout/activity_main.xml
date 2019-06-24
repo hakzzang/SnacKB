@@ -3,17 +3,18 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
-              android:id="@+id/fragment_scene"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"/>
+    <fragment
+            android:name="com.google.ar.sceneform.ux.ArFragment"
+            android:id="@+id/fragment_scene"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <Button
             android:layout_width="128dp"
             android:layout_height="64dp"
             android:id="@+id/btn_make_ar"
             android:text="create ar"
-            />
+    />
 </FrameLayout>
         <!--
         <androidx.constraintlayout.widget.ConstraintLayout
