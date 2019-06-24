@@ -4,6 +4,7 @@ import android.app.Activity
 import android.widget.Toast
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Session
+import java.util.*
 
 interface ARCoreManager{
     fun initSession() : Session?
@@ -11,6 +12,7 @@ interface ARCoreManager{
 
 class ARCoreManagerImpl(private val activity: Activity) : ARCoreManager{
     private var userRequestedInstall = true
+
     private val session by lazy {
         initARSession()
     }
@@ -24,7 +26,7 @@ class ARCoreManagerImpl(private val activity: Activity) : ARCoreManager{
         when (ArCoreApk.getInstance().requestInstall(activity, userRequestedInstall)) {
             ArCoreApk.InstallStatus.INSTALLED ->
                 // Success, create the AR session.
-                return Session(activity)
+                return Session(activity,  EnumSet.of(Session.Feature.SHARED_CAMERA))
             ArCoreApk.InstallStatus.INSTALL_REQUESTED ->
                 // Ensures next invocation of requestInstall() will either return
                 // INSTALLED or throw an exception.
