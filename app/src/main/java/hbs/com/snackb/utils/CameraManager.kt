@@ -14,7 +14,9 @@ import androidx.lifecycle.LifecycleOwner
 interface CameraManager{
     fun startCamera(viewFinder:TextureView, lifecycleOwner: LifecycleOwner)
     fun updateTransform(viewFinder: TextureView)
+    fun addLayoutChangeListener(viewFinder: TextureView)
     fun makePreviewConfig(viewFinder:TextureView): PreviewConfig
+    fun postCameraView(cameraManager: CameraManager, viewFinder:TextureView, lifecycleOwner: LifecycleOwner)
 }
 
 class CameraManagerImpl : CameraManager{
@@ -61,6 +63,13 @@ class CameraManagerImpl : CameraManager{
         viewFinder.setTransform(matrix)
     }
 
+
+    override fun addLayoutChangeListener(viewFinder: TextureView) {
+        viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            updateTransform(viewFinder)
+        }
+    }
+
     // Create configuration object for the viewfinder use case
     override fun makePreviewConfig(viewFinder:TextureView): PreviewConfig {
         return PreviewConfig.Builder().apply {
@@ -69,4 +78,7 @@ class CameraManagerImpl : CameraManager{
         }.build()
     }
 
+    override fun postCameraView(cameraManager: CameraManager, viewFinder:TextureView, lifecycleOwner: LifecycleOwner){
+        viewFinder.post { cameraManager.startCamera(viewFinder,lifecycleOwner) }
+    }
 }

@@ -1,28 +1,29 @@
 package hbs.com.snackb.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_main.*
 
 class PermissionManager{
-    private val REQUEST_CODE_PERMISSIONS = 2001
-    private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
-
+    companion object{
+        const val REQUEST_CODE_PERMISSIONS = 2001
+        val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
+    }
     /**
      * Check if all permission specified in the manifest have been granted
      */
-    private fun allPermissionsGranted(baseContext: Context) = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+    fun allPermissionsGranted(context: Context) = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
+    fun requestPermissions(activity:Activity){
+        ActivityCompat.requestPermissions(activity, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+    }
 
-    private fun checkPermission(baseContext: Context){
-        if (allPermissionsGranted(baseContext)) {
-            postCameraView(cameraManager, view_finder, this)
-        } else {
-            showPermissionToast(this@MainActivity)
-            finish()
-        }
+    fun showPermissionToast(context: Context){
+        Toast.makeText(context, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show()
     }
 }
