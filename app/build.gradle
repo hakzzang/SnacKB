@@ -51,7 +51,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
+
 sceneform.asset('src/main/java/hbs/com/snackb/model/model.obj',
         'default',
         'src/main/java/hbs/com/snackb/model/model.sfa',
-        'model/model')
+        'src/main/assets/model')
