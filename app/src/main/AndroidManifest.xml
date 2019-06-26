@@ -27,9 +27,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.MapActivity"
+                  android:configChanges="orientation|screenSize"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:screenOrientation="locked"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <meta-data
                 android:name="com.google.android.ar.API_KEY"
                 android:value="AIzaSyBJCtYJCvV9Ws03_LFL1RKX8zB5yUdLiaI "/>
+        <meta-data
+                android:name="com.naver.maps.map.CLIENT_ID"
+                android:value="gtojfwem5q" />
         <meta-data android:name="com.google.ar.core" android:value="required" />
     </application>
 
