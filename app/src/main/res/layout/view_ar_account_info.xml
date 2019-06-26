@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/planetInfoCard"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:background="@drawable/bg_radius_account_info"
+          android:gravity="center"
+          android:orientation="vertical"
+          android:padding="6dp"
+          android:text="문병학, 10000원"
+          android:textSize="8dp"
+          android:textColor="#000000"
+          android:textAlignment="center" />

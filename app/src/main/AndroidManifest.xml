@@ -27,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <meta-data
+                android:name="com.google.android.ar.API_KEY"
+                android:value="AIzaSyBJCtYJCvV9Ws03_LFL1RKX8zB5yUdLiaI "/>
         <meta-data android:name="com.google.ar.core" android:value="required" />
     </application>
 
