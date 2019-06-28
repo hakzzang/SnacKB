@@ -47,4 +47,5 @@
     <dimen name="text_size_xlarge">34sp</dimen>
     <dimen name="text_size_xxlarge">45sp</dimen>
     <dimen name="text_size_xxxlarge">56sp</dimen>
+    <dimen name="item_around_bank_height">32dp</dimen>
 </resources>
