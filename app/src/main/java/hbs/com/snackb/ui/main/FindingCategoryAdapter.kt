@@ -18,7 +18,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import hbs.com.snackb.R
 import hbs.com.snackb.utils.FindingCategory
-import kotlinx.android.synthetic.main.item_around_bank.view.*
+import kotlinx.android.synthetic.main.item_category.view.*
 
 interface FindingCategoryAdapterListener {
     fun onFindCategory(findingCategory: FindingCategory)
@@ -30,7 +30,7 @@ class FindingCategoryAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var tvTemp: TextView? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val rootView = LayoutInflater.from(parent.context).inflate(R.layout.item_around_bank, parent, false)
+        val rootView = LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false)
         return FindingCategoryViewHolder(rootView)
     }
 

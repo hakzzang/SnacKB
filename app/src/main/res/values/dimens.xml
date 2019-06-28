@@ -2,6 +2,7 @@
 <resources>
     <dimen name="headline_large">48sp</dimen>
     <dimen name="headline_normal">34sp</dimen>
+    <dimen name="headline_x_normal">30sp</dimen>
     <dimen name="headline_small">24sp</dimen>
     <dimen name="headline_x_small">20sp</dimen>
     <dimen name="body_normal">16sp</dimen>
