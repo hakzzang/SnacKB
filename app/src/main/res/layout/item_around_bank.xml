@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/margin_padding_size_large"
+              android:gravity="start">
+    <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_around_bank_height"
+            android:fontFamily="@font/nanumgothic_bold"
+            android:textSize="@dimen/headline_small"
+            android:textColor="@color/md_teal_700"/>
+</LinearLayout>
