@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
-import com.google.ar.core.Plane
 import com.google.ar.sceneform.ux.ArFragment
 import hbs.com.snackb.R
 import hbs.com.snackb.utils.AppAnchorState
 import hbs.com.snackb.utils.SceneformManager
 import hbs.com.snackb.utils.SnackbarHelper
 import hbs.com.snackb.utils.StorageManager
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_ar.*
 
 
 
 
-class MainActivity : AppCompatActivity(), LifecycleOwner {
+class CustomARActivity : AppCompatActivity(), LifecycleOwner {
     private val arFragment by lazy{
         supportFragmentManager.findFragmentById(R.id.fragment_scene) as ArFragment
     }
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_ar)
 
 
         fragmentScene.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
