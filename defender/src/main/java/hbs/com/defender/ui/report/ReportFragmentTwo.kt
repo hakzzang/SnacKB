@@ -19,7 +19,7 @@ class ReportFragmentTwo : Fragment() {
                               savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_report_two, container, false)
         val reportViewModel = activity?.let { ViewModelProviders.of(it).get(ReportViewModel::class.java) }
-        reportViewModel?.setFirstReportAnswer(Pair("1",view.context.resources.getString(R.string.all_text_one_per_day)))
+        reportViewModel?.setSecondReportAnswer(Pair("1",view.context.resources.getString(R.string.all_text_one_per_day)))
         view.btn_next_report.setOnClickListener{
             reportViewModel?.addTabPosition()
         }

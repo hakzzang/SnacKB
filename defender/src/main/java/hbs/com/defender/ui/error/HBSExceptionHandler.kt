@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import hbs.com.defender.R
 import java.io.PrintWriter
 import java.io.StringWriter
 import kotlin.system.exitProcess

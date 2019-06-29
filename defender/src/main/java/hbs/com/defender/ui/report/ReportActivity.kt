@@ -22,6 +22,9 @@ class ReportActivity : AppCompatActivity() {
                 1 -> changeFragmentTo(ReportFragmentTwo())
                 2 -> changeFragmentTo(ReportFragmentThree())
                 3 -> {
+                    intent.putExtra("answer1",reportViewModel.firstReportAnswer.value?.second)
+                    intent.putExtra("answer2",reportViewModel.secondReportAnswer.value?.second)
+                    intent.putExtra("answer3",reportViewModel.thirdReportAnswer.value?.second)
                     setResult(200, intent)
                     finish()
                 }
