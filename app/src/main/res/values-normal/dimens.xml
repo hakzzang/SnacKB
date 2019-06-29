@@ -28,7 +28,6 @@
     <dimen name="margin_padding_size_x_small">4dp</dimen>
     <dimen name="margin_padding_size_small">8dp</dimen>
     <dimen name="margin_padding_size_medium">16dp</dimen>
-    <dimen name="margin_padding_size_medium_2">18dp</dimen>
     <dimen name="margin_padding_size_large">24dp</dimen>
     <dimen name="margin_padding_size_xlarge">32dp</dimen>
     <dimen name="margin_padding_size_xxlarge">40dp</dimen>
@@ -56,9 +55,4 @@
 
 
     <dimen name="ic_point_size">16dp</dimen>
-
-    <dimen name="app_item_width">280dp</dimen>
-    <dimen name="app_item_height">340dp</dimen>
-    <dimen name="app_item_height_half">200dp</dimen>
-    <dimen name="app_item_icon_size">64dp</dimen>
 </resources>

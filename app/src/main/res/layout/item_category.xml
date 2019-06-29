@@ -11,5 +11,5 @@
             android:layout_height="@dimen/item_around_bank_height"
             android:fontFamily="@font/nanumgothic_bold"
             android:textSize="@dimen/body_normal"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/md_grey_400"/>
 </LinearLayout>

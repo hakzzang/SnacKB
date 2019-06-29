@@ -1,10 +1,13 @@
 package hbs.com.snackb.models
 
+import java.io.Serializable
+
 data class AroundBank(
-    val bankName: String,
-    val bankAddress: String,
-    val bankDistance: String,
-    val bankImage: String,
-    val bankWaitTime: String,
-    val bankWaitPeople : String
+    val appIcon: String = "",
+    val appTitle: String= "",
+    val appPackageName: String= "",
+    val appPublishName:String= "",
+    val appHitCnt: Int = 0,
+    val appRegistDate: String= "",
+    val appPoint : String= ""
 )

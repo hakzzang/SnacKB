@@ -1,11 +1,15 @@
 package hbs.com.snackb.ui.main
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import hbs.com.snackb.BuildConfig
+import hbs.com.snackb.R
 import hbs.com.snackb.api.BaseAPI
 import hbs.com.snackb.api.KBApi
 import hbs.com.snackb.api.NetModule
@@ -16,34 +20,14 @@ import hbs.com.snackb.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.http.HeaderMap
-import java.util.*
-import kotlin.collections.HashMap
-import android.telephony.SubscriptionInfo
-import android.content.Context.TELEPHONY_SUBSCRIPTION_SERVICE
-import android.telephony.SubscriptionManager
-import android.content.Context
-import androidx.core.content.ContextCompat.getSystemService
-import android.telephony.TelephonyManager
-import hbs.com.snackb.BuildConfig
-import hbs.com.snackb.R
-import java.net.NetworkInterface
-import java.util.Base64.getEncoder
-import android.provider.SyncStateContract.Helpers.update
-import java.nio.file.Files.readAllBytes
-import java.io.IOException
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.util.Base64.getEncoder
-import androidx.annotation.RequiresApi
-import com.google.android.gms.common.util.Hex
 import org.json.JSONObject
-import java.nio.charset.StandardCharsets
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
+import java.net.NetworkInterface
+import java.text.NumberFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
+    private val testImg:String = "https://scontent-yyz1-1.cdninstagram.com/vp/8d061301416ab17dbe3accbfd648308c/5D49D1CB/t51.2885-15/e35/51054929_421437628597852_3501897158316313770_n.jpg?_nc_ht=scontent-yyz1-1.cdninstagram.com&se=8"
     private val aroundBankList = mutableListOf<AroundBank>()
     private val categoryMutableList = mutableListOf<String>()
     private val findingCategoryAdapter
@@ -52,16 +36,48 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
         AroundBankCardListAdapter(aroundBankList)
     }
 
+    private var totalPoint:Int = 0;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+
+        val requestAppList = RequestFBAppList(object : RequestFBDataListener{
+            override fun onResponse(list: ArrayList<AroundBank>) {
+                aroundBankList.addAll(list)
+                aroundBankCardListAdapter.notifyDataSetChanged()
+
+                for (obj in aroundBankList) {
+                    totalPoint = totalPoint + Integer.parseInt(obj.appPoint)
+                    Log.d("sortResult1", obj.appRegistDate)
+                }
+                aroundBankList.sortedWith(compareBy({it.appRegistDate}))
+                for (obj in aroundBankList) {
+                    Log.d("sortResult2", obj.appRegistDate)
+                }
+                tv_total_point.text = NumberFormat.getNumberInstance(Locale.US).format(totalPoint)
+            }
+
+            override fun onFailed(msg: String) {
+                Log.d("RequestFBAppList", "onFailed : "+msg)
+            }
+
+        })
+
+        requestAppList.requestFBAppList()
+
         setContentView(hbs.com.snackb.R.layout.activity_main)
-        initAroundBank()
         initCategory()
         initView()
 
+
+
+        val kbRepository = initKBRepository()
+        val headerMap: HashMap<String, String> = hashMapOf()
         val hmacUtils = HMACUtils()
 
         getAccountAll(JJwtHelper())
+        throw NullPointerException()
     }
 
     private fun initView() {
@@ -72,9 +88,10 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
             }
             val snapHelper = LinearSnapHelper()
             snapHelper.attachToRecyclerView(this)
-            addItemDecoration(MarginItemDecoration(24))
+            addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.margin_main_view_space_side).toInt()))
             adapter = aroundBankCardListAdapter
         }
+
         rv_finding_category.apply {
             LinearLayoutManager(this@MainActivity).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
@@ -87,15 +104,9 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
     }
 
     private fun initCategory() {
-        categoryMutableList.add(getString(R.string.category_recommended_title))
-        categoryMutableList.add(getString(R.string.category_recent_title))
-        categoryMutableList.add(getString(R.string.category_using_title))
-    }
-
-    private fun initAroundBank() {
-        aroundBankList.add(AroundBank("기흥 국민은행", "기흥구 새우버거 집 앞", "2500m", "", "10분", "2명"))
-        aroundBankList.add(AroundBank("수서 국민은행", "수서 감자튀김 집 앞", "1500m", "", "12분", "3명"))
-        aroundBankList.add(AroundBank("새우버거 국민은행", "새우버거 놀이터 앞", "2000m", "", "8분", "4명"))
+        categoryMutableList.add(getString(R.string.category_hit))
+        categoryMutableList.add(getString(R.string.category_recent))
+        categoryMutableList.add(getString(R.string.category_point))
     }
 
     private fun initKBRepository(): KBRepository {

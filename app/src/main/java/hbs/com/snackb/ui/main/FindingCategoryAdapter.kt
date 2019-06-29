@@ -54,7 +54,7 @@ class FindingCategoryAdapter(
         }
         textView.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, (textView.textSize * 1.2).toFloat())
-            setTextColor(textView.resources.getColor(R.color.md_teal_A400))
+            setTextColor(textView.resources.getColor(R.color.md_black_1000))
             tvTemp = this
         }
     }
@@ -92,7 +92,7 @@ class FindingCategoryAdapter(
     }
 
     private fun toDestinationColorAnimator(textView: TextView) {
-        val colorDestination = textView.context.getColor(R.color.md_teal_A400)
+        val colorDestination = textView.context.getColor(R.color.md_black_1000)
         ObjectAnimator.ofObject(textView,"textColor",ArgbEvaluator(),textView.currentTextColor,colorDestination)
             .apply {
                 duration = 300
@@ -100,7 +100,7 @@ class FindingCategoryAdapter(
     }
 
     private fun toResourceColorAnimator(textView: TextView) {
-        val colorResource = textView.context.getColor(R.color.md_teal_700)
+        val colorResource = textView.context.getColor(R.color.md_grey_400)
         ObjectAnimator.ofObject(textView,"textColor",ArgbEvaluator(),textView.currentTextColor,colorResource)
             .apply {
                 duration = 300
