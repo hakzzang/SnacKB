@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -34,8 +35,7 @@ import retrofit2.Response
 import java.net.NetworkInterface
 import java.text.NumberFormat
 import java.util.*
-
-
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
@@ -44,13 +44,21 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     val appTotalPointRef = firebaseDatabase.getReference().child("my_point")
+    val accountListRef = firebaseDatabase.getReference().child("my_account")
 
     private val aroundBankList = mutableListOf<AroundBank>()
     private val categoryMutableList = mutableListOf<String>()
+    private val accountList = mutableListOf<BankTransaction>()
+
+
     private val findingCategoryAdapter
             by lazy { FindingCategoryAdapter(categoryMutableList, this) }
     private val aroundBankCardListAdapter by lazy {
         AroundBankCardListAdapter(aroundBankList)
+    }
+
+    private val accountListAdapter by lazy{
+        MyAccountListAdapter(this, accountList as ArrayList<BankTransaction>)
     }
 
     private var totalPoint:Int = 0;
@@ -66,11 +74,9 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
                 for (obj in aroundBankList) {
                     totalPoint = totalPoint + Integer.parseInt(obj.appPoint)
-                    Log.d("sortResult1", obj.appRegistDate)
                 }
                 aroundBankList.sortedWith(compareBy({it.appRegistDate}))
                 for (obj in aroundBankList) {
-                    Log.d("sortResult2", obj.appRegistDate)
                 }
                 tv_total_point.text = NumberFormat.getNumberInstance(Locale.US).format(totalPoint)
             }
@@ -81,13 +87,27 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
         })
 
+        val requestAccountList = RequestFBAccountList(object : RequestFBAccountList.RequestFBAccountListener{
+            override fun onResponse(list: ArrayList<BankTransaction>) {
+                accountList.addAll(list)
+                accountListAdapter.notifyDataSetChanged()
+            }
+
+            override fun onFailed(msg: String) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
+
         requestFBTotalPoint()
         requestAppList.requestFBAppList()
+        requestAccountList.requestFBAccountList()
+
+        getAccountAll()
 
         initCategory()
         initView()
 
-        getAccountAll()
 
     }
 
@@ -112,6 +132,15 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
             snapHelper.attachToRecyclerView(this)
             adapter = findingCategoryAdapter
         }
+
+        rv_my_account_list.apply{
+            LinearLayoutManager(this@MainActivity).apply {
+                orientation = RecyclerView.VERTICAL
+                layoutManager = this
+            }
+            adapter = accountListAdapter
+        }
+
     }
 
     private fun initCategory() {
@@ -158,6 +187,10 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
                     //you can do whatever with the response body now...
                     val responseBodyString = responseBody.string()
                     val account = accountParser(responseBodyString)
+
+                    saveAccountListFB(account)
+                    initUserName(account.userName)
+
                     Log.d("account",account.toString())
                 }
 
@@ -179,6 +212,7 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
             val bankTransaction = BankTransaction(account, balance, accountAlias, accountNum)
             transactionList.add(bankTransaction)
         }
+
         return BankAccount(userName, transactionList)
     }
 
@@ -267,4 +301,11 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
     }
 
+    private fun saveAccountListFB(saveItem:BankAccount){
+        accountListRef.setValue(saveItem)
+    }
+
+    private fun initUserName(name:String){
+        tv_greeting_name.text ="${name}님,\n안녕하세요."
+    }
 }

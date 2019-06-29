@@ -8,7 +8,6 @@ class RequestFBAppList(val listener: RequestFBDataListener) {
 
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     val appListRef = firebaseDatabase.getReference().child("app_info")
-    val appTotalPointRef = firebaseDatabase.getReference().child("my_point")
 
 
     public fun requestFBAppList() {
