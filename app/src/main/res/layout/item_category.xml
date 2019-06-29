@@ -3,13 +3,13 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_margin="@dimen/margin_padding_size_large"
+              android:layout_marginRight="@dimen/margin_main_view_space_side"
               android:gravity="start">
     <TextView
             android:id="@+id/tv_category"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/item_around_bank_height"
             android:fontFamily="@font/nanumgothic_bold"
-            android:textSize="@dimen/headline_small"
-            android:textColor="@color/md_teal_700"/>
+            android:textSize="@dimen/body_normal"
+            android:textColor="@color/colorPrimary"/>
 </LinearLayout>
