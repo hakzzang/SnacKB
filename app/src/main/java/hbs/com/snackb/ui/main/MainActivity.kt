@@ -1,12 +1,11 @@
 package hbs.com.snackb.ui.main
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
-import hbs.com.snackb.R
 import hbs.com.snackb.api.BaseAPI
 import hbs.com.snackb.api.KBApi
 import hbs.com.snackb.api.NetModule
@@ -18,6 +17,31 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.http.HeaderMap
+import java.util.*
+import kotlin.collections.HashMap
+import android.telephony.SubscriptionInfo
+import android.content.Context.TELEPHONY_SUBSCRIPTION_SERVICE
+import android.telephony.SubscriptionManager
+import android.content.Context
+import androidx.core.content.ContextCompat.getSystemService
+import android.telephony.TelephonyManager
+import hbs.com.snackb.BuildConfig
+import hbs.com.snackb.R
+import java.net.NetworkInterface
+import java.util.Base64.getEncoder
+import android.provider.SyncStateContract.Helpers.update
+import java.nio.file.Files.readAllBytes
+import java.io.IOException
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.util.Base64.getEncoder
+import androidx.annotation.RequiresApi
+import com.google.android.gms.common.util.Hex
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+
 
 class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
     private val aroundBankList = mutableListOf<AroundBank>()
@@ -30,30 +54,14 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(hbs.com.snackb.R.layout.activity_main)
         initAroundBank()
         initCategory()
         initView()
-        val kbRepository = initKBRepository()
-        val headerMap: HashMap<String, String> = hashMapOf()
+
         val hmacUtils = HMACUtils()
-        val jjwtHelper = JJwtHelper()
-        headerMap["apiKey"] = BaseAPI.apiKey
-        /*headerMap["hsKey"] = jjwtHelper.convertJWS()*/
 
-        kbRepository
-            .getLawAreaList(headerMap)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result -> Log.d("result", result.toString()) },
-                { error -> error.printStackTrace() })
-
-        /*kbRepository
-            .getDetailBranchInfo(headerMap)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result -> Log.d("result", result.toString()) },
-                { error -> error.printStackTrace() })*/
+        getAccountAll(JJwtHelper())
     }
 
     private fun initView() {
@@ -105,4 +113,91 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
             FindingCategory.USING -> ""
         }
     }
+
+
+    private fun getAccountAll(jjwtHelper:JJwtHelper) {
+        val headerMap: HashMap<String, String> = hashMapOf()
+        headerMap["apikey"] = BaseAPI.apiKey
+        val bodyMap: HashMap<String, Map<String, String>> = hashMapOf()
+        bodyMap["dataHeader"] = makeDataHeaderMap()
+        bodyMap["dataBody"] = makeDataBody()
+        val jsonObject = JSONObject(bodyMap)
+        val hsKey= SecretUtils.getHsKey(BaseAPI.apiKey, jsonObject.toString())
+        headerMap["hsKey"] = hsKey.toString()
+        Log.d("hsKey",hsKey.toString())
+        val kbRepository = initKBRepository()
+        Log.d("bodyMap", jsonObject.toString())
+        kbRepository
+            .getAccountAll(headerMap, bodyMap)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                Log.d("result", result.execute().body().toString()) },
+                { error -> Log.d("error",error.cause?.message) })
+    }
+
+    private fun makeDataHeaderMap(): HashMap<String, String> {
+        val dataHeaderMap = hashMapOf<String, String>()
+        dataHeaderMap["udId"] = makeUUID()
+        dataHeaderMap["subChannel"] = makeSubChannel()
+        dataHeaderMap["deviceModel"] = makeDeviceModel()
+        dataHeaderMap["deviceOs"] = makeDeviceOs()
+        dataHeaderMap["carrier"] = makeCarrierName()
+        dataHeaderMap["connectionType"] = makeConnectionType()
+        dataHeaderMap["appName"] = getString(hbs.com.snackb.R.string.app_name)
+        dataHeaderMap["appVersion"] = makeVersionCode()
+        dataHeaderMap["scrNo"] = "0"
+        dataHeaderMap["scrName"] = "0"
+        return dataHeaderMap
+    }
+
+    private fun makeDataBody() : HashMap<String, String>{
+        val dataBodyMap = hashMapOf<String, String>()
+        dataBodyMap["CI번호"] = makeAccountPin()
+        dataBodyMap["계좌조회구분"] = makeProductNum()
+        return dataBodyMap
+    }
+    private fun makeUUID(): String {
+        return UUID.randomUUID().toString()
+    }
+
+    private fun makeSubChannel(): String {
+        return "1"
+    }
+
+    private fun makeDeviceModel(): String {
+        return  Build.MODEL;
+    }
+
+    private fun makeDeviceOs() : String{
+        return Build.VERSION.RELEASE
+    }
+
+    private fun makeCarrierName() : String{
+        val manager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        return manager.networkOperatorName
+    }
+
+    private fun makeConnectionType(): String {
+        val eni: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces();
+        while(eni.hasMoreElements()){
+            val nii:NetworkInterface=eni.nextElement();
+            if(nii.isUp)
+                return nii.displayName
+        }
+        return ""
+    }
+
+    private fun makeVersionCode(): String {
+        return BuildConfig.VERSION_CODE.toString()
+    }
+
+    private fun makeAccountPin() : String{
+        return "123456789"
+    }
+
+    private fun makeProductNum() : String{
+        return "1"
+    }
+
 }
