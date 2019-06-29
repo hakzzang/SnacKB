@@ -8,4 +8,12 @@
     <string name="category_recommended_title">추천 은행</string>
     <string name="category_recent_title">가까운 은행</string>
     <string name="category_using_title">이전에 방문했던 은행</string>
+    <string name="all_text_switch_screen">화면 전환 중</string>
+    <string name="all_text_start_and_end_app">앱 시작 및 종료 중</string>
+    <string name="all_text_using_network">네트워크 사용 중</string>
+    <string name="all_text_etc">기타</string>
+    <string name="all_text_one_per_day">1일 1회</string>
+    <string name="all_text_one_per_week">1주일 1회</string>
+    <string name="all_text_not_friendly_using">자주 사용 안 함</string>
+    <string name="all_text_at_first">처음 사용</string>
 </resources>
