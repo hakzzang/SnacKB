@@ -4,7 +4,6 @@ import hbs.com.snackb.api.KBApi
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.HeaderMap
 
 
 interface KBRepository {
@@ -12,13 +11,13 @@ interface KBRepository {
 
     fun getLawAreaList(headerMap: Map<String, String>) : Single<List<String>>
 
-    fun getAccountAll(headerMap: Map<String, String>, bodyMap:HashMap<String, Map<String, String>>) : Single<retrofit2.Call<ResponseBody>>
+    fun getAccountAll(headerMap: Map<String, String>, bodyMap:HashMap<String, Map<String, String>>) : Call<ResponseBody>
 
 
 }
 
 class KBRepositoryImpl constructor(private val kbApi: KBApi) : KBRepository{
-    override fun getAccountAll(headerMap: Map<String, String>, bodyMap:HashMap<String, Map<String, String>>): Single<retrofit2.Call<ResponseBody>> {
+    override fun getAccountAll(headerMap: Map<String, String>, bodyMap:HashMap<String, Map<String, String>>): Call<ResponseBody>{
         return kbApi.getAccountAll(headerMap, bodyMap)
     }
 

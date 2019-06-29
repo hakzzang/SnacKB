@@ -18,16 +18,24 @@ import hbs.com.snackb.api.BaseAPI
 import hbs.com.snackb.api.KBApi
 import hbs.com.snackb.api.NetModule
 import hbs.com.snackb.models.AroundBank
+import hbs.com.snackb.models.BankAccount
+import hbs.com.snackb.models.BankTransaction
 import hbs.com.snackb.repository.KBRepository
 import hbs.com.snackb.repository.KBRepositoryImpl
-import hbs.com.snackb.utils.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import hbs.com.snackb.utils.FindingCategory
+import hbs.com.snackb.utils.SecretUtils
+import hbs.com.snackb.utils.StartSnapHelper
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.ResponseBody
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.net.NetworkInterface
 import java.text.NumberFormat
 import java.util.*
+
+
 
 
 class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
@@ -79,12 +87,8 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
         initCategory()
         initView()
 
+        getAccountAll()
 
-        val kbRepository = initKBRepository()
-        val headerMap: HashMap<String, String> = hashMapOf()
-        val hmacUtils = HMACUtils()
-
-       getAccountAll(JJwtHelper())
     }
 
     private fun initView() {
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
     }
 
 
-    private fun getAccountAll(jjwtHelper:JJwtHelper) {
+    private fun getAccountAll() {
         val headerMap: HashMap<String, String> = hashMapOf()
         headerMap["apikey"] = BaseAPI.apiKey
         val bodyMap: HashMap<String, Map<String, String>> = hashMapOf()
@@ -142,16 +146,40 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
         val jsonObject = JSONObject(bodyMap)
         val hsKey= SecretUtils.getHsKey(BaseAPI.apiKey, jsonObject.toString())
         headerMap["hsKey"] = hsKey.toString()
-        Log.d("hsKey",hsKey.toString())
         val kbRepository = initKBRepository()
-        Log.d("bodyMap", jsonObject.toString())
         kbRepository
-            .getAccountAll(headerMap, bodyMap)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result ->
-                Log.d("result", result.execute().body().toString()) },
-                { error -> Log.d("error",error.cause?.message) })
+            .getAccountAll(headerMap, bodyMap).enqueue(object : Callback<ResponseBody>{
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.d("error", t.message)
+                }
+
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    val responseBody = response.body() as ResponseBody
+                    //you can do whatever with the response body now...
+                    val responseBodyString = responseBody.string()
+                    val account = accountParser(responseBodyString)
+                    Log.d("account",account.toString())
+                }
+
+            })
+    }
+
+    private fun accountParser(bodyContent:String): BankAccount {
+        val transactionList = mutableListOf<BankTransaction>()
+        val json = JSONObject(bodyContent)
+        val dataBody = json.getJSONObject("dataBody")
+        val userName = dataBody.getString("고객명")
+        val dataList = dataBody.getJSONArray("데이터부")
+        for(index in 0 until dataList.length()){
+            val jsonObject = dataList.getJSONObject(index)
+            val account = jsonObject.getString("상품명")
+            val balance= jsonObject.getString("잔액")
+            val accountAlias = jsonObject.getString("계좌별명")
+            val accountNum = jsonObject.getString("계좌번호")
+            val bankTransaction = BankTransaction(account, balance, accountAlias, accountNum)
+            transactionList.add(bankTransaction)
+        }
+        return BankAccount(userName, transactionList)
     }
 
     private fun makeDataHeaderMap(): HashMap<String, String> {
