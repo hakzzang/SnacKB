@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headline_large">72sp</dimen>
+    <dimen name="headline_normal">51sp</dimen>
+    <dimen name="headline_x_normal">45sp</dimen>
+    <dimen name="headline_small">36sp</dimen>
+    <dimen name="headline_x_small">30sp</dimen>
+    <dimen name="body_normal">24sp</dimen>
+    <dimen name="body_small">21sp</dimen>
+    <dimen name="body_caption">18sp</dimen>
+    <dimen name="margin_main_view_space_top">72dp</dimen>
+    <dimen name="margin_main_view_space_side">48dp</dimen>
+    <dimen name="margin_main_view_space_top_normal">24dp</dimen>
+    <dimen name="margin_main_view_space_side_negative">-48dp</dimen>
+    <dimen name="rv_finding_category_height">96dp</dimen>
+
+    <!--
+		# Material Design Dimensions
+		These dimensions are provided as per Material Design Guidelines
+		to adhere to a 8 dp baseline grid. (With the exception of the
+		toolbar and notification bar.).
+		## References
+		- https://www.google.com/design/spec/layout/metrics-keylines.html
+		- https://material.io/guidelines/style/typography.html#typography-typeface
+	-->
+
+    <!-- Margins & Padding, 8 dp baseline, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-baseline-grids -->
+    <dimen name="margin_padding_size_small">12dp</dimen>
+    <dimen name="margin_padding_size_medium">24dp</dimen>
+    <dimen name="margin_padding_size_large">36dp</dimen>
+    <dimen name="margin_padding_size_xlarge">48dp</dimen>
+    <dimen name="margin_padding_size_xxlarge">60dp</dimen>
+
+    <!-- Launcher Icon Size, https://developer.android.com/guide/practices/ui_guidelines/icon_design_launcher.html#size -->
+    <dimen name="launcher_icon_size">@dimen/standard_touch_size</dimen>
+
+    <!-- Touch Target Size, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-touch-target-size-->
+    <dimen name="standard_touch_size">72dp</dimen>
+
+    <!-- Toolbar, 4 dp baseline, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-baseline-grids -->
+    <dimen name="toolbar_margin_size">6dp</dimen>
+    <dimen name="toolbar_icon_size">36dp</dimen>
+
+    <!-- Font sizes, https://material.io/guidelines/style/typography.html#typography-typeface -->
+    <dimen name="text_size_micro">18sp</dimen>
+    <dimen name="text_size_small">21sp</dimen>
+    <dimen name="text_size_medium">24sp</dimen>
+    <dimen name="text_size_large">30sp</dimen>
+    <dimen name="text_size_large_2">39sp</dimen>
+    <dimen name="text_size_xlarge">51sp</dimen>
+    <dimen name="text_size_xxlarge">67.5sp</dimen>
+    <dimen name="text_size_xxxlarge">84sp</dimen>
+    <dimen name="item_around_bank_height">42dp</dimen>
+
+
+    <dimen name="ic_point_size">24dp</dimen>
+</resources>

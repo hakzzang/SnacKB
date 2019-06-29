@@ -120,7 +120,7 @@ class FindingCategoryAdapter(
     }
 
     private fun scaleDownAnimator(textView: TextView) {
-        ValueAnimator.ofFloat(textView.textSize, textView.context.resources.getDimension(R.dimen.headline_small))
+        ValueAnimator.ofFloat(textView.textSize, textView.context.resources.getDimension(R.dimen.body_normal))
             .apply {
                 addUpdateListener {
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, (it.animatedValue).toString().toFloat())

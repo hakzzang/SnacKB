@@ -3,57 +3,89 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/margin_main_view_space_top">
-    <LinearLayout
+        android:layout_height="match_parent">
+    <TextView
+            android:id="@+id/tv_greeting_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ll_greeting_container"
+            android:fontFamily="@font/nanumgothic_bold"
+            android:text="병학님, 안녕하세요."
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/greeting_content_description"
-            android:orientation="vertical"
+            android:layout_marginTop="@dimen/margin_main_view_space_top"
+            android:layout_marginLeft="@dimen/margin_main_view_space_side"
+            android:textColor="@color/md_grey_900"
+            android:textSize="@dimen/headline_x_small"/>
+
+    <!--<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_greeting_title"
+            android:fontFamily="@font/nanumgothic_regular"
+            android:text="@string/greeting_title"
+            android:textColor="@color/md_grey_900"
+            android:layout_marginTop="10dp"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/tv_greeting_name"
+            app:layout_constraintLeft_toLeftOf="@id/tv_greeting_name"
+            android:textSize="@dimen/body_small"/>-->
+    <LinearLayout
+            android:id="@+id/ll_today_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:paddingLeft="@dimen/margin_main_view_space_side"
-            android:paddingRight="@dimen/margin_main_view_space_side">
+            android:paddingRight="@dimen/margin_main_view_space_side"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/margin_main_view_space_top_normal"
+            android:paddingTop="@dimen/margin_padding_size_small"
+            android:paddingBottom="@dimen/margin_padding_size_small"
+            app:layout_constraintTop_toBottomOf="@id/tv_greeting_name">
         <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_greeting_title"
-                android:layout_marginBottom="@dimen/margin_padding_size_small"
-                android:fontFamily="@font/nanumgothic_extrabold"
-                android:hint="@string/greeting_title"
-                android:text="@string/greeting_title"
-                android:textStyle="bold"
-                android:textColor="@color/md_grey_900"
-                android:textSize="@dimen/headline_normal"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:includeFontPadding="false"
+                android:text="지금 획득 가능한 포인트"
+                android:gravity="center_vertical"
+                android:textColor="@color/md_grey_800"
+                android:fontFamily="@font/nanumgothic_regular"
+                android:textSize="@dimen/text_size_small"/>
+
+        <ImageView android:layout_width="@dimen/ic_point_size"
+                   android:layout_height="@dimen/ic_point_size"
+                   android:layout_marginRight="8dp"
+                   android:src="@drawable/ic_point"/>
         <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_greeting_subtitle"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="1,769,048"
+                android:includeFontPadding="false"
+                android:textColor="@color/md_amber_A400"
                 android:fontFamily="@font/nanumgothic_bold"
-                android:hint="@string/gretting_subtitle"
-                android:text="@string/gretting_subtitle"
-                android:textStyle="bold"
-                android:textColor="@color/md_grey_700"
-                android:textSize="@dimen/body_normal"/>
+                android:textSize="@dimen/text_size_small"/>
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rv_finding_category"
-            android:clipToPadding="false"
-            app:layout_constraintTop_toBottomOf="@id/ll_greeting_container"/>
+            android:paddingLeft="@dimen/margin_main_view_space_side"
+            app:layout_constraintTop_toBottomOf="@id/ll_today_point"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:clipToPadding="false"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/rv_finding_bank"
+            android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingLeft="@dimen/margin_main_view_space_side"
-            android:paddingRight="@dimen/margin_main_view_space_side"
             app:layout_constraintTop_toBottomOf="@id/rv_finding_category"
-            app:layout_constraintBottom_toTopOf="@id/btn_search_around_bank">
-
+            android:paddingLeft="@dimen/margin_main_view_space_side"
+            android:paddingRight="@dimen/margin_main_view_space_side">
     </androidx.recyclerview.widget.RecyclerView>
     <Button
             android:layout_width="128dp"
@@ -61,7 +93,6 @@
             android:id="@+id/btn_search_around_bank"
             android:text="@string/btn_search_around_title"
             android:hint="@string/btn_search_around_title"
-            android:contentDescription="@string/search_around_content_description"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
