@@ -1,13 +1,12 @@
 package hbs.com.snackb.api
 
-import io.reactivex.Observable
 import io.reactivex.Single
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.HeaderMap
-import retrofit2.http.Query
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 interface KBApi {
+    @POST("getAccountAll/")
+    fun getAccountAll(@HeaderMap headerMap: Map<String, String>, @Body bodyMap:HashMap<String, Map<String, String>>): Single<retrofit2.Call<ResponseBody>>
 
     @GET("getDetailBranchInfo/")
     fun getDetailBranchInfo(@HeaderMap headerMap: Map<String, String>): Single<List<String>>

@@ -1,16 +1,14 @@
 package hbs.com.snackb.ui.main
 
-import android.graphics.PointF
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.request.RequestOptions
+import hbs.com.snackb.BuildConfig
 import hbs.com.snackb.R
 import hbs.com.snackb.api.BaseAPI
 import hbs.com.snackb.api.KBApi
@@ -21,15 +19,12 @@ import hbs.com.snackb.repository.KBRepositoryImpl
 import hbs.com.snackb.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import jp.wasabeef.glide.transformations.BlurTransformation
-import jp.wasabeef.glide.transformations.gpu.ContrastFilterTransformation
-import jp.wasabeef.glide.transformations.gpu.VignetteFilterTransformation
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.http.HeaderMap
+import org.json.JSONObject
+import java.net.NetworkInterface
 import java.text.NumberFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
     private val testImg:String = "https://scontent-yyz1-1.cdninstagram.com/vp/8d061301416ab17dbe3accbfd648308c/5D49D1CB/t51.2885-15/e35/51054929_421437628597852_3501897158316313770_n.jpg?_nc_ht=scontent-yyz1-1.cdninstagram.com&se=8"
@@ -71,30 +66,18 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
         requestAppList.requestFBAppList()
 
+        setContentView(hbs.com.snackb.R.layout.activity_main)
         initCategory()
         initView()
+
 
 
         val kbRepository = initKBRepository()
         val headerMap: HashMap<String, String> = hashMapOf()
         val hmacUtils = HMACUtils()
-        val jjwtHelper = JJwtHelper()
-        headerMap["apiKey"] = BaseAPI.apiKey
-        /*headerMap["hsKey"] = jjwtHelper.convertJWS()*/
 
-        kbRepository
-            .getLawAreaList(headerMap)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result -> Log.d("result", result.toString()) },
-                { error -> error.printStackTrace() })
-
-        /*kbRepository
-            .getDetailBranchInfo(headerMap)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result -> Log.d("result", result.toString()) },
-                { error -> error.printStackTrace() })*/
+        getAccountAll(JJwtHelper())
+        throw NullPointerException()
     }
 
     private fun initView() {
@@ -141,4 +124,91 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
             FindingCategory.USING -> ""
         }
     }
+
+
+    private fun getAccountAll(jjwtHelper:JJwtHelper) {
+        val headerMap: HashMap<String, String> = hashMapOf()
+        headerMap["apikey"] = BaseAPI.apiKey
+        val bodyMap: HashMap<String, Map<String, String>> = hashMapOf()
+        bodyMap["dataHeader"] = makeDataHeaderMap()
+        bodyMap["dataBody"] = makeDataBody()
+        val jsonObject = JSONObject(bodyMap)
+        val hsKey= SecretUtils.getHsKey(BaseAPI.apiKey, jsonObject.toString())
+        headerMap["hsKey"] = hsKey.toString()
+        Log.d("hsKey",hsKey.toString())
+        val kbRepository = initKBRepository()
+        Log.d("bodyMap", jsonObject.toString())
+        kbRepository
+            .getAccountAll(headerMap, bodyMap)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                Log.d("result", result.execute().body().toString()) },
+                { error -> Log.d("error",error.cause?.message) })
+    }
+
+    private fun makeDataHeaderMap(): HashMap<String, String> {
+        val dataHeaderMap = hashMapOf<String, String>()
+        dataHeaderMap["udId"] = makeUUID()
+        dataHeaderMap["subChannel"] = makeSubChannel()
+        dataHeaderMap["deviceModel"] = makeDeviceModel()
+        dataHeaderMap["deviceOs"] = makeDeviceOs()
+        dataHeaderMap["carrier"] = makeCarrierName()
+        dataHeaderMap["connectionType"] = makeConnectionType()
+        dataHeaderMap["appName"] = getString(hbs.com.snackb.R.string.app_name)
+        dataHeaderMap["appVersion"] = makeVersionCode()
+        dataHeaderMap["scrNo"] = "0"
+        dataHeaderMap["scrName"] = "0"
+        return dataHeaderMap
+    }
+
+    private fun makeDataBody() : HashMap<String, String>{
+        val dataBodyMap = hashMapOf<String, String>()
+        dataBodyMap["CI번호"] = makeAccountPin()
+        dataBodyMap["계좌조회구분"] = makeProductNum()
+        return dataBodyMap
+    }
+    private fun makeUUID(): String {
+        return UUID.randomUUID().toString()
+    }
+
+    private fun makeSubChannel(): String {
+        return "1"
+    }
+
+    private fun makeDeviceModel(): String {
+        return  Build.MODEL;
+    }
+
+    private fun makeDeviceOs() : String{
+        return Build.VERSION.RELEASE
+    }
+
+    private fun makeCarrierName() : String{
+        val manager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        return manager.networkOperatorName
+    }
+
+    private fun makeConnectionType(): String {
+        val eni: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces();
+        while(eni.hasMoreElements()){
+            val nii:NetworkInterface=eni.nextElement();
+            if(nii.isUp)
+                return nii.displayName
+        }
+        return ""
+    }
+
+    private fun makeVersionCode(): String {
+        return BuildConfig.VERSION_CODE.toString()
+    }
+
+    private fun makeAccountPin() : String{
+        return "123456789"
+    }
+
+    private fun makeProductNum() : String{
+        return "1"
+    }
+
 }

@@ -55,5 +55,4 @@
 
 
     <dimen name="ic_point_size">16dp</dimen>
-    <dimen name="app_item_icon_size">64dp</dimen>
 </resources>
