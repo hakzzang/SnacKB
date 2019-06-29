@@ -5,13 +5,21 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class MarginItemDecoration(private val spaceHeight: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(outRect: Rect, view: View,
-                                parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect, view: View,
+        parent: RecyclerView, state: RecyclerView.State
+    ) {
+        val layoutManager = parent.layoutManager
+        val total = layoutManager!!.itemCount
+        val current = layoutManager.getPosition(view)
+
         with(outRect) {
-            top = spaceHeight
-            left =  spaceHeight
-            right = spaceHeight
-            bottom = spaceHeight
+            if (current == total - 1) {
+                top = spaceHeight/2
+            } else {
+                top = spaceHeight/2
+                right = spaceHeight
+            }
         }
     }
 }

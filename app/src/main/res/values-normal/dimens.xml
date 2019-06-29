@@ -25,6 +25,7 @@
 	-->
 
     <!-- Margins & Padding, 8 dp baseline, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-baseline-grids -->
+    <dimen name="margin_padding_size_x_small">4dp</dimen>
     <dimen name="margin_padding_size_small">8dp</dimen>
     <dimen name="margin_padding_size_medium">16dp</dimen>
     <dimen name="margin_padding_size_large">24dp</dimen>
@@ -54,4 +55,5 @@
 
 
     <dimen name="ic_point_size">16dp</dimen>
+    <dimen name="app_item_icon_size">64dp</dimen>
 </resources>
