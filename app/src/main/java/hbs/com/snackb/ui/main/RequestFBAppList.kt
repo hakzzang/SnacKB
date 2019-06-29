@@ -8,16 +8,17 @@ class RequestFBAppList(val listener: RequestFBDataListener) {
 
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     val appListRef = firebaseDatabase.getReference().child("app_info")
+    val appTotalPointRef = firebaseDatabase.getReference().child("my_point")
 
 
     public fun requestFBAppList() {
-        var appList = mutableListOf<AroundBank>()
         appListRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 listener.onFailed(p0.message)
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                var appList = mutableListOf<AroundBank>()
                 if (p0!!.exists()) {
                     for (childDataSnap in p0.children) {
                         val aroundBank = childDataSnap.getValue(AroundBank::class.java)
@@ -34,5 +35,4 @@ class RequestFBAppList(val listener: RequestFBDataListener) {
 
         })
     }
-
 }

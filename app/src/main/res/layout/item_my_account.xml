@@ -1,8 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
+        android:background="@drawable/bg_radius_account_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+    <TextView
+            android:id="@+id/tv_account_alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이홍주의 통장"
+            android:fontFamily="@font/nanumgothic_regular"
+            android:textColor="@color/md_grey_800"
+            android:textSize="@dimen/body_small"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:layout_marginLeft="@dimen/margin_padding_size_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+    <TextView
+            android:id="@+id/tv_account_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_padding_size_medium"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:fontFamily="@font/nanumgothic_regular"
+            android:textColor="@color/md_grey_800"
+            android:textSize="@dimen/body_small"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="상품이름"/>
 
-</LinearLayout>
+    <TextView
+            android:id="@+id/tv_account_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="3333-08-1233321"
+            android:textSize="@dimen/body_small"
+            android:fontFamily="@font/nanumgothic_regular"
+            android:textColor="@color/md_grey_700"
+            android:layout_marginTop="@dimen/margin_padding_size_medium_2"
+            app:layout_constraintTop_toBottomOf="@id/tv_account_alias"/>
+
+    <TextView
+            android:id="@+id/tv_account_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100000"
+            android:fontFamily="@font/nanumgothic_bold"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/md_black_1000"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="@dimen/margin_padding_size_medium"
+            app:layout_constraintTop_toBottomOf="@id/tv_account_num"/>
+    <TextView
+            android:id="@+id/tv_send_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="이체"
+            android:gravity="center"
+            android:textColor="@color/md_grey_800"
+            android:textSize="@dimen/body_small"
+            android:fontFamily="@font/nanumgothic_regular"
+            android:padding="@dimen/margin_padding_size_small"
+            android:layout_marginTop="@dimen/margin_main_view_space_side"
+            app:layout_constraintTop_toBottomOf="@id/tv_account_balance"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

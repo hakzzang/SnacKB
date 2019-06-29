@@ -8,6 +8,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import hbs.com.snackb.BuildConfig
 import hbs.com.snackb.R
 import hbs.com.snackb.api.BaseAPI
@@ -35,7 +39,12 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
-    private val testImg:String = "https://scontent-yyz1-1.cdninstagram.com/vp/8d061301416ab17dbe3accbfd648308c/5D49D1CB/t51.2885-15/e35/51054929_421437628597852_3501897158316313770_n.jpg?_nc_ht=scontent-yyz1-1.cdninstagram.com&se=8"
+
+
+
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val appTotalPointRef = firebaseDatabase.getReference().child("my_point")
+
     private val aroundBankList = mutableListOf<AroundBank>()
     private val categoryMutableList = mutableListOf<String>()
     private val findingCategoryAdapter
@@ -72,9 +81,9 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
         })
 
+        requestFBTotalPoint()
         requestAppList.requestFBAppList()
 
-        setContentView(hbs.com.snackb.R.layout.activity_main)
         initCategory()
         initView()
 
@@ -235,6 +244,27 @@ class MainActivity : AppCompatActivity(), FindingCategoryAdapterListener {
 
     private fun makeProductNum() : String{
         return "1"
+    }
+
+
+    private fun requestFBTotalPoint(){
+        var totalPoint:String = ""
+
+        appTotalPointRef.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0!!.exists()) {
+                    totalPoint = p0.value.toString()
+
+                    tv_total_my_point.text = NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(totalPoint))
+
+                }
+            }
+
+        })
+
     }
 
 }
