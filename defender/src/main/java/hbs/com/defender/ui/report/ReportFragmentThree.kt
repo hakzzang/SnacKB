@@ -20,7 +20,7 @@ class ReportFragmentThree : Fragment() {
                               savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.fragment_report_three, container, false)
         val reportViewModel = activity?.let { ViewModelProviders.of(it).get(ReportViewModel::class.java) }
-
+        reportViewModel?.setThirdReportAnswer(Pair("0","EMPTY"))
         view.btn_next_report.setOnClickListener{
             if(view.et_comment.text == null){
                 reportViewModel?.setThirdReportAnswer(Pair("0", ""))

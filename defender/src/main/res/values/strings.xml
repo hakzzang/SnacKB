@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">SnacKB</string>
     <string name="greeting_title">안녕하세요.</string>
     <string name="gretting_subtitle">찾으시려는 곳의 위치는 어디인가요?</string>
     <string name="greeting_content_description">안녕하세요. 찾으시려는 곳의 위치는 어디인가요?</string>
