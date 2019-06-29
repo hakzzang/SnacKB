@@ -3,11 +3,12 @@
           package="hbs.com.snackb">
     <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
     <uses-permission android:name="android.permission.CAMERA"/>
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!-- Indicates that app requires ARCore ("AR Required"). Ensures app is only
          visible in the Google Play Store on devices that support ARCore.
          For "AR Optional" apps remove this line. -->
     <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
+
     <application
             android:name="hbs.com.defender.ui.error.HBSErrorApplication"
             android:allowBackup="true"
@@ -16,6 +17,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
+            android:networkSecurityConfig="@xml/network_security_config"
             android:usesCleartextTraffic="false">
         <activity android:name=".ui.CustomARActivity"
                   android:configChanges="orientation|screenSize"
@@ -45,13 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="hbs.com.defender.ui.error.ErrorActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
         <meta-data
                 android:name="com.google.android.ar.API_KEY"
                 android:value="AIzaSyBJCtYJCvV9Ws03_LFL1RKX8zB5yUdLiaI "/>
