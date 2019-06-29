@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SnacKB.iml" filepath="$PROJECT_DIR$/SnacKB.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/defender/defender.iml" filepath="$PROJECT_DIR$/defender/defender.iml" />
     </modules>
   </component>
 </project>

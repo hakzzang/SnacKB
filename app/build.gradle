@@ -80,6 +80,8 @@ dependencies {
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.5') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
+
+    implementation project(path: ':defender')
 }
 
 
